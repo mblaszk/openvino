@@ -25,6 +25,7 @@ NGRAPH_RTTI_DEFINITION(InsertCopyBeforeConcatLayer, "InsertCopyBeforeConcatLayer
 NGRAPH_RTTI_DEFINITION(HandleMultiConnectedLayerToConcatAndMemory, "HandleMultiConnectedLayerToConcatAndMemory");
 NGRAPH_RTTI_DEFINITION(MatchNonComputationalLayers, "MatchNonComputationalLayers");
 NGRAPH_RTTI_DEFINITION(HandleNonFunctionalSubgraphs, "HandleNonFunctionalSubgraphs");
+NGRAPH_RTTI_DEFINITION(MyDummyTransformation, "MyDummyTransformation");
 
 namespace {
 void insert_copy_layer_between(std::shared_ptr<ngraph::Node> input_op,
@@ -391,5 +392,20 @@ MatchNonComputationalLayers::MatchNonComputationalLayers() {
     };
 
     auto m = std::make_shared<ngraph::pattern::Matcher>(noncompute_op, matcher_name);
+    this->register_matcher(m, callback);
+}
+
+/* My dummy transformation
+ */
+MyDummyTransformation::MyDummyTransformation() {
+    MATCHER_SCOPE(MyDummyTransformation);
+
+    auto result_op = ngraph::pattern::wrap_type<ngraph::opset8::Result>();
+
+    ngraph::matcher_pass_callback callback = [=](ngraph::pattern::Matcher& m) {
+        return true;
+    };
+
+    auto m = std::make_shared<ngraph::pattern::Matcher>(result_op, matcher_name);
     this->register_matcher(m, callback);
 }

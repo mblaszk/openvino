@@ -192,6 +192,17 @@ public:
     }
 };
 
+
+/**
+ * @brief Runs MatchNonComputationalLayers transformation in reverse order to passthru rt_info and identify the
+ * non-computational subgraphs.
+ */
+class MyDummyTransformation : public ngraph::pass::MatcherPass {
+public:
+    NGRAPH_RTTI_DECLARATION;
+    MyDummyTransformation();
+};
+
 }  // namespace pass
 }  // namespace intel_gna
 }  // namespace ov
